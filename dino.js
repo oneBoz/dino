@@ -27,7 +27,6 @@ class Dino {
     } else {
       this.velY = 0;
       this.y = 0;
-      this.gravity = 1.2
     }
   }
 }

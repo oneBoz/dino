@@ -1,6 +1,6 @@
 let player_x_pos = 50;
 let playerWidth = 25;
-let gravity = 0.5;
+
 
 class Dino {
   constructor() {
@@ -10,6 +10,7 @@ class Dino {
 
     this.h = this.w * 2;
     this.y = 0;
+    this.gravity = 1.3;
   }
 
   show() {
@@ -22,7 +23,7 @@ class Dino {
   move() {
     this.y += this.velY;
     if (this.y > 0) {
-      this.velY -= gravity; //velY points upwards
+      this.velY -= this.gravity; //velY points upwards
     } else {
       this.velY = 0;
       this.y = 0;

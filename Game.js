@@ -2,16 +2,29 @@ let groundHeight = 100;
 let dino;
 let cactus;
 let obstacles = [];
+let minDistBetweenCacti;
+let rangeDistBetweenCacti;
+let distToNextCactus;
 let spaceDownTimer = 0;
 let spaceDown = false;
 
 function setup() {
   createCanvas(600, 400);
+
+  // RNG variables
+  minDistBetweenCacti = 300;
+  rangeDistBetweenCacti = width;
+  
+
+function setup() {
+  createCanvas(600, 400);
   frameRate(60);
   dino = new Dino();
+
   for (let i = 0; i < 2; i++) {
     let c = new Cactus();
     obstacles.push(c);
+    distToNextCactus = Math.random() * width + minDistBetweenCacti;
   }
 }
 
@@ -19,13 +32,23 @@ function draw() {
   drawToScreen();
   dino.show();
   dino.move();
-  obstacles[0].show();
-  obstacles[0].move();
 
-  if (obstacles[0].x < 0) {
+  // Move all cacti
+  for(let i=0; i<obstacles.length; i++){
+    obstacles[i].show();
+    obstacles[i].move();
+  }
+
+  // Remove extra cacti, leave one to determine when to get the next cactus
+  while (obstacles.length > 1 && obstacles[0].x < 0) {
     obstacles.shift();
+  }
+
+  // Create new cactus only if distance to previous cactus has been reached
+  if (width - obstacles[obstacles.length-1].x >= distToNextCactus) {
     let c = new Cactus();
     obstacles.push(c);
+    distToNextCactus = Math.random() * width + minDistBetweenCacti;
   }
   
   if (spaceDown) {

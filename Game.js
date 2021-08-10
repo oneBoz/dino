@@ -8,17 +8,16 @@ let distToNextCactus;
 let spaceDownTimer = 0;
 let spaceDown = false;
 
-function setup() {
-  createCanvas(600, 400);
 
-  // RNG variables
-  minDistBetweenCacti = 300;
-  rangeDistBetweenCacti = width;
-  
 
 function setup() {
   createCanvas(600, 400);
   frameRate(60);
+
+  // RNG variables
+  minDistBetweenCacti = 300;
+  rangeDistBetweenCacti = width;
+
   dino = new Dino();
 
   for (let i = 0; i < 2; i++) {
@@ -50,19 +49,19 @@ function draw() {
     obstacles.push(c);
     distToNextCactus = Math.random() * width + minDistBetweenCacti;
   }
-  
+
   if (spaceDown) {
     spaceDownTimer++;
   }
-  
 
-  
+
+
 }
 
 //displays everything on screen
 function drawToScreen() {
   background(0);
-  stroke(255);   
+  stroke(255);
   strokeWeight(3);
   line(0, height - groundHeight, width, height - groundHeight);
 }
@@ -71,7 +70,7 @@ function keyPressed() {
   switch (key) {
     case " ":
       if (dino.y == 0) {
-        dino.velY = 16; 
+        dino.velY = 16;
         dino.gravity = 0.8;
         spaceDown = true;
         spaceDownTimer = 0;
@@ -90,12 +89,3 @@ function keyReleased() {
       break;
   }
 }
-
-
-
-
-
-
-
-
-

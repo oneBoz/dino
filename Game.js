@@ -7,6 +7,7 @@ let rangeDistBetweenCacti;
 let distToNextCactus;
 let spaceDownTimer = 0;
 let spaceDown = false;
+let dinoDead = false;
 
 
 
@@ -30,6 +31,26 @@ function setup() {
 function draw() {
   drawToScreen();
   dino.show();
+  if (dinoDead) {
+    drawEndScreen();
+    if (keyIsPressed == true) {
+      restart();
+    }
+  } else {
+    play();
+  }
+
+}
+
+
+
+
+
+
+
+// --------------------------start the game---------------------------
+function play() {
+  checkCollision()
   dino.move();
 
   // Move all cacti
@@ -58,7 +79,63 @@ function draw() {
 
 }
 
-//displays everything on screen
+
+
+
+
+
+
+//------------------------collision check-----------------------------
+function checkCollision(){
+  if (obstacles[0].x >= dino.x && obstacles[0].x <= dino.x + dino.w) {
+    if (dino.y <= obstacles[0].h) {
+      dinoDead = true;
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+// ---------------Displays end screen when dino is dead---------------
+function drawEndScreen(){
+  dino.show();
+  for(let i=0; i<obstacles.length; i++){
+    obstacles[i].show();
+  }
+}
+
+
+//--------------------------------restart-----------------------------
+
+function restart(){
+  dino = new Dino();
+  obstacles = [];
+  for (let i = 0; i < 2; i++) {
+    let c = new Cactus();
+    obstacles.push(c);
+    distToNextCactus = Math.random() * width + minDistBetweenCacti;
+  }
+
+  dinoDead = false;
+
+}
+
+
+
+
+
+
+
+
+
+//-----------------creates backdrop for the dino game-----------------
 function drawToScreen() {
   background(0);
   stroke(255);
@@ -66,6 +143,16 @@ function drawToScreen() {
   line(0, height - groundHeight, width, height - groundHeight);
 }
 
+
+
+
+
+
+
+
+
+
+// -----------------------controls------------------------------------
 function keyPressed() {
   switch (key) {
     case " ":

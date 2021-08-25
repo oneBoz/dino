@@ -17,15 +17,13 @@ function setup() {
 
   // RNG variables
   minDistBetweenCacti = 300;
-  rangeDistBetweenCacti = width;
+  rangeDistBetweenCacti = width / 2;
 
   dino = new Dino();
 
-  for (let i = 0; i < 2; i++) {
-    let c = new Cactus();
-    obstacles.push(c);
-    distToNextCactus = Math.random() * width + minDistBetweenCacti;
-  }
+  let c = nextObstacle();
+  obstacles.push(c);
+  distToNextCactus = Math.random() * rangeDistBetweenCacti + minDistBetweenCacti;
 }
 
 function draw() {
@@ -66,9 +64,9 @@ function play() {
 
   // Create new cactus only if distance to previous cactus has been reached
   if (width - obstacles[obstacles.length-1].x >= distToNextCactus) {
-    let c = new Cactus();
+    let c = nextObstacle()
     obstacles.push(c);
-    distToNextCactus = Math.random() * width + minDistBetweenCacti;
+    distToNextCactus = Math.random() * rangeDistBetweenCacti + minDistBetweenCacti;
   }
 
   if (spaceDown) {
@@ -87,8 +85,8 @@ function play() {
 
 //------------------------collision check-----------------------------
 function checkCollision(){
-  if (obstacles[0].x >= dino.x && obstacles[0].x <= dino.x + dino.w) {
-    if (dino.y <= obstacles[0].h) {
+  if (obstacles[0].x + obstacles[0].w >= dino.x && obstacles[0].x <= dino.x + dino.w) {
+    if (dino.y <= obstacles[0].y + obstacles[0].h && dino.y + dino.h >= obstacles[0].y) {
       dinoDead = true;
     }
   }
@@ -117,11 +115,9 @@ function drawEndScreen(){
 function restart(){
   dino = new Dino();
   obstacles = [];
-  for (let i = 0; i < 2; i++) {
-    let c = new Cactus();
-    obstacles.push(c);
-    distToNextCactus = Math.random() * width + minDistBetweenCacti;
-  }
+  let c = nextObstacle();
+  obstacles.push(c);
+  distToNextCactus = Math.random() * rangeDistBetweenCacti + minDistBetweenCacti;
 
   dinoDead = false;
 
@@ -176,3 +172,11 @@ function keyReleased() {
       break;
   }
 }
+
+
+// -------------function that returns the next obstacle---------------
+function nextObstacle(){
+  let obstacles = [new Cactus(), new DoubleCactus(), new Bird()]
+  return obstacles[Math.floor(Math.random()*3)]
+}
+

@@ -7,7 +7,7 @@ let rangeDistBetweenCacti;
 let distToNextCactus;
 let spaceDownTimer = 0;
 let spaceDown = false;
-let dinoDead = false;
+// let dinoDead = false;
 
 
 
@@ -29,7 +29,8 @@ function setup() {
 function draw() {
   drawToScreen();
   dino.show();
-  if (dinoDead) {
+  // if (dinoDead) {
+  if (dino.dead) {
     drawEndScreen();
     if (keyIsPressed == true) {
       restart();
@@ -87,7 +88,8 @@ function play() {
 function checkCollision(){
   if (obstacles[0].x + obstacles[0].w >= dino.x && obstacles[0].x <= dino.x + dino.w) {
     if (dino.y <= obstacles[0].y + obstacles[0].h && dino.y + dino.h >= obstacles[0].y) {
-      dinoDead = true;
+      // dinoDead = true;
+      dino.dead = true;
     }
   }
 }
@@ -119,7 +121,7 @@ function restart(){
   obstacles.push(c);
   distToNextCactus = Math.random() * rangeDistBetweenCacti + minDistBetweenCacti;
 
-  dinoDead = false;
+  // dinoDead = false;
 
 }
 

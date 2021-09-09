@@ -7,9 +7,7 @@ let rangeDistBetweenCacti;
 let distToNextCactus;
 let spaceDownTimer = 0;
 let spaceDown = false;
-let dinoDead = false;
-
-
+// let dinoDead = false;
 
 function setup() {
   createCanvas(600, 400);
@@ -23,13 +21,15 @@ function setup() {
 
   let c = nextObstacle();
   obstacles.push(c);
-  distToNextCactus = Math.random() * rangeDistBetweenCacti + minDistBetweenCacti;
+  distToNextCactus =
+    Math.random() * rangeDistBetweenCacti + minDistBetweenCacti;
 }
 
 function draw() {
   drawToScreen();
   dino.show();
-  if (dinoDead) {
+  // if (dinoDead) {
+  if (dino.dead) {
     drawEndScreen();
     if (keyIsPressed == true) {
       restart();
@@ -37,22 +37,15 @@ function draw() {
   } else {
     play();
   }
-
 }
-
-
-
-
-
-
 
 // --------------------------start the game---------------------------
 function play() {
-  checkCollision()
+  checkCollision();
   dino.move();
 
   // Move all cacti
-  for(let i=0; i<obstacles.length; i++){
+  for (let i = 0; i < obstacles.length; i++) {
     obstacles[i].show();
     obstacles[i].move();
   }
@@ -63,73 +56,54 @@ function play() {
   }
 
   // Create new cactus only if distance to previous cactus has been reached
-  if (width - obstacles[obstacles.length-1].x >= distToNextCactus) {
-    let c = nextObstacle()
+  if (width - obstacles[obstacles.length - 1].x >= distToNextCactus) {
+    let c = nextObstacle();
     obstacles.push(c);
-    distToNextCactus = Math.random() * rangeDistBetweenCacti + minDistBetweenCacti;
+    distToNextCactus =
+      Math.random() * rangeDistBetweenCacti + minDistBetweenCacti;
   }
 
   if (spaceDown) {
     spaceDownTimer++;
   }
-
-
-
 }
 
-
-
-
-
-
-
 //------------------------collision check-----------------------------
-function checkCollision(){
-  if (obstacles[0].x + obstacles[0].w >= dino.x && obstacles[0].x <= dino.x + dino.w) {
-    if (dino.y <= obstacles[0].y + obstacles[0].h && dino.y + dino.h >= obstacles[0].y) {
-      dinoDead = true;
+function checkCollision() {
+  if (
+    dino.x <= obstacles[0].x + obstacles[0].w  &&
+    dino.x + dino.w >= obstacles[0].x 
+  ) {
+    if (
+      dino.y <= obstacles[0].y + obstacles[0].h  &&
+      dino.y + dino.h >= obstacles[0].y 
+    ) {
+      // dinoDead = true;
+      dino.dead = true;
     }
   }
 }
 
-
-
-
-
-
-
-
-
-
 // ---------------Displays end screen when dino is dead---------------
-function drawEndScreen(){
+function drawEndScreen() {
   dino.show();
-  for(let i=0; i<obstacles.length; i++){
+  for (let i = 0; i < obstacles.length; i++) {
     obstacles[i].show();
   }
 }
 
-
 //--------------------------------restart-----------------------------
 
-function restart(){
+function restart() {
   dino = new Dino();
   obstacles = [];
   let c = nextObstacle();
   obstacles.push(c);
-  distToNextCactus = Math.random() * rangeDistBetweenCacti + minDistBetweenCacti;
+  distToNextCactus =
+    Math.random() * rangeDistBetweenCacti + minDistBetweenCacti;
 
-  dinoDead = false;
-
+  // dinoDead = false;
 }
-
-
-
-
-
-
-
-
 
 //-----------------creates backdrop for the dino game-----------------
 function drawToScreen() {
@@ -139,19 +113,10 @@ function drawToScreen() {
   line(0, height - groundHeight, width, height - groundHeight);
 }
 
-
-
-
-
-
-
-
-
-
 // -----------------------controls------------------------------------
 function keyPressed() {
-  switch (key) {
-    case " ":
+  switch (keyCode) {
+    case 32:
       if (dino.y == 0) {
         dino.velY = 16;
         dino.gravity = 0.8;
@@ -159,24 +124,34 @@ function keyPressed() {
         spaceDownTimer = 0;
       }
       break;
+    case 16:
+      dino.duck = true;
+      dino.w = 50;
+      dino.h = 25;
+      dino.gravity = 2.0;
+
+      break;
   }
 }
 
 function keyReleased() {
-  switch (key) {
-    case " ":
+  switch (keyCode) {
+    case 32:
       if (spaceDownTimer < 13) {
         dino.gravity = 1.5;
       }
       spaceDown = false;
       break;
+    case 16:
+      dino.duck = false;
+      dino.w = 25;
+      dino.h = 50;
+      break;
   }
 }
 
-
 // -------------function that returns the next obstacle---------------
-function nextObstacle(){
-  let obstacles = [new Cactus(), new DoubleCactus(), new Bird()]
-  return obstacles[Math.floor(Math.random()*3)]
+function nextObstacle() {
+  let obstacles = [new Cactus(), new DoubleCactus(), new Bird()];
+  return obstacles[Math.floor(Math.random() * 3)];
 }
-

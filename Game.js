@@ -7,6 +7,7 @@ let rangeDistBetweenCacti;
 let distToNextCactus;
 let spaceDownTimer = 0;
 let spaceDown = false;
+let score;
 // let dinoDead = false;
 
 function setup() {
@@ -17,16 +18,20 @@ function setup() {
   minDistBetweenCacti = 300;
   rangeDistBetweenCacti = width / 2;
 
-  dino = new Dino();
+  restart();
+  // dino = new Dino();
 
-  let c = nextObstacle();
-  obstacles.push(c);
-  distToNextCactus =
-    Math.random() * rangeDistBetweenCacti + minDistBetweenCacti;
+  // let c = nextObstacle();
+  // obstacles.push(c);
+  // distToNextCactus =
+  //   Math.random() * rangeDistBetweenCacti + minDistBetweenCacti;
+
+  // score = 0;
 }
 
 function draw() {
   drawToScreen();
+  displayScore();
   dino.show();
   // if (dinoDead) {
   if (dino.dead) {
@@ -54,6 +59,9 @@ function play() {
   while (obstacles.length > 1 && obstacles[0].x < 0) {
     obstacles.shift();
   }
+
+  // Update score with how much obstacles have moved
+  score -= obstacles[0].xSpeed;
 
   // Create new cactus only if distance to previous cactus has been reached
   if (width - obstacles[obstacles.length - 1].x >= distToNextCactus) {
@@ -96,11 +104,14 @@ function drawEndScreen() {
 
 function restart() {
   dino = new Dino();
+  
   obstacles = [];
   let c = nextObstacle();
   obstacles.push(c);
   distToNextCactus =
     Math.random() * rangeDistBetweenCacti + minDistBetweenCacti;
+
+  score = 0;
 
   // dinoDead = false;
 }
@@ -154,4 +165,15 @@ function keyReleased() {
 function nextObstacle() {
   let obstacles = [new Cactus(), new DoubleCactus(), new Bird()];
   return obstacles[Math.floor(Math.random() * 3)];
+}
+
+// --------------display score---------------------------------------
+function displayScore(){
+  let scoreText = score.toString();
+  while(scoreText.length < 5){
+    scoreText = '0' + scoreText;
+  }
+  strokeWeight(1);
+  textFont('Courier New');
+  text(scoreText, 550, 10);
 }

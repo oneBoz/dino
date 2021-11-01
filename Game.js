@@ -8,6 +8,7 @@ let distToNextCactus;
 let spaceDownTimer = 0;
 let spaceDown = false;
 let score;
+let keyNotPressedWhileDead;
 // let dinoDead = false;
 
 function setup() {
@@ -36,7 +37,10 @@ function draw() {
   // if (dinoDead) {
   if (dino.dead) {
     drawEndScreen();
-    if (keyIsPressed == true) {
+    if (!keyIsPressed){
+      keyNotPressedWhileDead = true;
+    }
+    if (keyNotPressedWhileDead && keyIsPressed) {
       restart();
     }
   } else {
@@ -112,6 +116,8 @@ function restart() {
     Math.random() * rangeDistBetweenCacti + minDistBetweenCacti;
 
   score = 0;
+
+  keyNotPressedWhileDead = false
 
   // dinoDead = false;
 }
